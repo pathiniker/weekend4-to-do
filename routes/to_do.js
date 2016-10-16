@@ -18,7 +18,7 @@ router.get('/', function(req, res){
       return;
     }
 
-    client.query('SELECT * FROM list;', function(err, result){
+    client.query('SELECT task FROM list;', function(err, result){
       done();
       if (err) {
         console.log('Error querying the DB', err);
@@ -34,7 +34,35 @@ router.get('/', function(req, res){
 });
 
 
+router.get('/:id', function(req, res) {
+  pool.connect(function(err, client, done) {
+    if (err) {
+      console.log('Error connecting to the DB', err);
+      res.sendStatus(500);
+      done();
+      return;
+    }
+    client.query('SELECT * FROM list WHERE id = $1;', [req.params.id], function(err, result){
+      done();
+      if (err) {
+        console.log('Error querying the DB', err);
+        res.sendStatus(500);
+        return;
+      }
+
+      console.log('Got rows from the DB:', result.rows);
+      res.send(result.rows);
+    });
+  });
+});
+
+
+
+
 router.post('/', function(req, res){
+
+  // var task = req.body.task;
+
   pool.connect(function(err, client, done){
     if (err) {
       console.log('Error connecting the DB', err);
@@ -44,7 +72,7 @@ router.post('/', function(req, res){
     }
 
     client.query('INSERT INTO list (task) VALUES ($1) returning *;',
-    [req.body.task],
+    [req.body.newtask],
     function(err, result){
       done();
       if (err) {
@@ -58,40 +86,43 @@ router.post('/', function(req, res){
   });
 });
 
-//
-//
-// PUT localhost:3000/list/42
-// req.params.id === 42
+router.put('/:id', function(req, res){
 
-// UPDATE TASK ITEM:
+    var id = req.params.id; //takes the value from /:id
+    var task = req.body.task;
 
-// router.put('/:id', function(req, res) {
-//   var id = req.params.id;
-//   var task = req.body.task;
-//
-//   pool.connect(function(err, client, done){
-//     try {
-//       if (err) {
-//         console.log('Error connecting the DB', err);
-//         res.sendStatus(500);
-//         return;
-//       }
-//
-//       client.query('UPDATE list SET task=$1 WHERE id=$2 RETURNING *;',
-//       [task, id],
-//       function(err, result) {
-//         if (err) {
-//           console.log('Error querying database', err);
-//           res.sendStatus(500);
-//         } else {
-//           res.send(result.rows);
-//         }
-//       });
-//     } finally {
-//       done();
-//     }
-//   });
-// });
+
+    pool.connect(function(err, client, done){
+        try{  //try block and finally useful way to clean up system resources
+        if(err){
+            console.log('Error connecting to the DB', err);
+            res.sendStatus(500);
+
+            return; //stops execution of the function
+        }
+        //Update database
+    client.query('UPDATE list SET task = $1 WHERE id = $2 RETURNING *;',
+        [task], function(err, result){
+            if(err){
+            console.log('Error querying database',err);
+            res.sendStatus(500);
+
+      } else {
+
+        res.send(result.rows);
+}
+});
+
+} finally {
+    done();
+    }
+  });
+});
+
+
+
+
+
 
 // DELETE TASK ITEM:
 

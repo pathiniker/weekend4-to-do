@@ -2,11 +2,9 @@ $(function() {
   getList();
 
   $('#add-task').on('submit', addTask);
-  // $('#guests').on('click', '.save', updatelist);
-  // $('#guests').on('click', '.delete', deletelist);
-  // $('#guests').on('click', '.check', updateStatus);
-});
 
+  // $('#task-list').on('click', '.complete', updateTask);
+});
 
 
 function getList() {
@@ -17,123 +15,53 @@ function getList() {
   });
 }
 
-
-
-
 function displayTasks(response) {
   console.log(response);
-  var $ul = $('#task-list');
-  $ul.empty();
+  var $list = $('#task-list');
+  $list.empty();
   response.forEach(function(list) {
     var $li = $('<li></li>');
     var $form = $('<form></form>');
 
     $form.append('<li id="' + list.id + '">' + list.task + '</li>');
-    // $form.append('<li>' + list.task + ' ' + list.last_name + '</li>');
 
-    // var $saveButton = $('<button class="save">Save</button>');
-    // $saveButton.data('id', list.id);
-    // $form.append($saveButton);
-    //
-    // var $deleteButton = $('<button class="delete">Delete</button>');
-    // $deleteButton.data('id', list.id);
-    // $form.append($deleteButton);
-
-    // var $checkButton = $('<button class="check">CHECK IN</button>');
-    // $checkButton.data('id', list.id);
-    // $form.append($checkButton);
-
-
-    // var date = new Date(list.published);
-
-    // surely there must be a better way to format this date
-    // $form.append('<li><input type="date" name="published" value="' + date.toISOSliing().slice(0,10) + '"/></li>');
-
-    // make a button and store the id data on it
-
-
-
-
-
+    var $completeButton = $('<button class="complete">COMPLETE</button>');
+    $completeButton.data('id', list.id);
+    $form.append($completeButton);
 
     $li.append($form);
-    $ul.append($li);
+    $list.append($li);
   });
 }
-//
-function addTask(event) {
-  event.prevenliefault();
 
-  var peliata = $(this).serialize();
+function addTask(event) {
+  event.preventDefault();
+
+  var listData = $(this).serialize();
 
   $.ajax({
     type: 'POST',
-    url: '/list_app',
-    data: peliata,
-    success: getlists
+    url: '/to_do',
+    data: listData,
+    success: getList
   });
 
   $(this).find('input').val('');
 }
 
-// function updatelist(event) {
-//   event.prevenliefault();
-//
-//   var $button = $(this);
-//   var $form = $button.closest('form');
-//
-//   var data = $form.serialize();
-//   console.log('data', data);
-//   $.ajax({
-//     type: 'PUT',
-//     url: '/list_app/' + $button.data('id'),
-//     data: data,
-//     success: getlists
-//   });
-// }
 
-// function deletelist(event) {
-//   event.prevenliefault();
-//
-//   var listId = $(this).data('id');
-//
-//   $.ajax({
-//     type: 'DELETE',
-//     url: '/list_app/' + listId,
-//     success: getlists
-//   });
-// }
+function updatelist(event) {
+  event.preventDefault();
 
-// function updateStatus(event) {
-//   event.prevenliefault();
-//
-// var date = new Date();
-//   // date = date.toISOSliing().slice(0,10);
-//
-//   var status = $(this).text();
-//   var listId = $(this).data('id');
-//   var data = {};
-//
-//   data.date = date;
-//   // data.id = listId;
-//   data.status = status;
-//
-//   console.log('data', data);
-//
-// console.log('date', date);
-// console.log('list id', listId);
-//
-//
-//
-//   $.ajax({
-//     type: 'PUT',
-//     url: '/status/' + status +'/'+ listId,
-//     data: data,
-//     success: $('.check').text('CHECK OUT')
-//
-//
-//
-//   })
-//
-//
-// }
+  var $button = $(this);
+  var $form = $button.closest('form');
+
+  var data = $form.serialize();
+  console.log('data', data);
+  $.ajax({
+    type: 'PUT',
+    url: '/to_do/' + $button.data('id'),
+    data: data,
+    success: getLists
+  });
+}
