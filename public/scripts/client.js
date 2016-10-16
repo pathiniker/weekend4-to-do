@@ -4,6 +4,7 @@ $(function() {
   $('#add-task').on('submit', addTask);
 
   $('#task-list').on('click', '.complete', updateTask);
+  $('#task-list').on('click', '.delete', deleteTask);
 });
 
 
@@ -14,7 +15,6 @@ function getList() {
     success: displayTasks
   });
 }
-var $li = $('<li></li>');
 
 function displayTasks(response) {
   console.log(response);
@@ -22,12 +22,17 @@ function displayTasks(response) {
   $list.empty();
   response.forEach(function(list) {
     var $form = $('<form></form>');
+    var $li = $('<li></li>');
 
     $form.append('<li id="' + list.id + '">' + list.task + '</li>');
 
-    var $completeButton = $('<button class="complete"></button>');
+    var $completeButton = $('<button class="complete">Complete</button></button>');
     $completeButton.data('id', list.id);
     $form.append($completeButton);
+
+    var $deleteButton = $('<button class="delete">Delete</button>');
+    $deleteButton.data('id', list.id);
+    $form.append($deleteButton);
 
     $li.append($form);
     $list.append($li);
@@ -58,7 +63,7 @@ function updateTask(event) {
 
   var data = $form.serialize();
 
-  $li.data('id', list.id).css('background-color', 'grey');
+  // $li.append('')
 
   console.log('data', data);
   $.ajax({
@@ -68,5 +73,17 @@ function updateTask(event) {
     success: getList
 
 
+  });
+}
+
+function deleteTask(event) {
+  event.preventDefault();
+
+  var taskId = $(this).data('id');
+
+  $.ajax({
+    type: 'DELETE',
+    url: '/to_do/' + taskId,
+    success: getList
   });
 }

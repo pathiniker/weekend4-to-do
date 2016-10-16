@@ -57,8 +57,6 @@ router.get('/:id', function(req, res) {
 });
 
 
-
-
 router.post('/', function(req, res){
 
   // var task = req.body.task;

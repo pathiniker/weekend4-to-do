@@ -7,3 +7,5 @@ CREATE TABLE todo (
 id SERIAL PRIMARY KEY,
 task varchar(120) NOT NULL
 );
+
+-- 3. add completed yes / no column
