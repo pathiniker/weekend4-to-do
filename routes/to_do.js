@@ -102,7 +102,7 @@ router.put('/:id', function(req, res){
         }
         // 'UPDATE list SET $2 WHERE id=$1', [id, true]
     client.query('UPDATE list SET completed = $2 WHERE id = $1 RETURNING *;',
-        [task, completed], function(err, result){
+        [id, TRUE], function(err, result){
             if(err){
             console.log('Error querying database',err);
             res.sendStatus(500);

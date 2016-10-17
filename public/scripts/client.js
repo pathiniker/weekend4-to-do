@@ -34,7 +34,7 @@ function displayTasks(response) {
 
     $form.append('<li id="' + list.id + '">' + list.task + '</li>');
 
-    var $completeButton = $('<button class="complete">Complete</button></button>').data('id', list.id);
+    var $completeButton = $('<button class="complete">&#10003;</button></button>').data('id', list.id);
     // $completeButton.data('id', list.id);
     $form.append($completeButton);
 
@@ -44,7 +44,7 @@ function displayTasks(response) {
     // $div.append('<button class="addNewTask">Complete</button>');
   // }
 
-    var $deleteButton = $('<button class="delete">Delete</button>').data('id', list.id);
+    var $deleteButton = $('<button class="delete">X</button>').data('id', list.id);
     console.log(list.id);
     // $deleteButton.data('id', list.id);
     $form.append($deleteButton);
