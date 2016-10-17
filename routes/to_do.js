@@ -4,7 +4,7 @@ var pg = require('pg');
 var config = {
   database: 'to-do'
 };
-// var complete = false;
+// var completed = false;
 // initialize the database connection pool
 var pool = new pg.Pool(config);
 
@@ -69,8 +69,8 @@ router.post('/', function(req, res){
       return;
     }
 
-    client.query('INSERT INTO list (task, complete) VALUES ($1, $2) RETURNING *;',
-    [req.body.newtask, req.body.complete],
+    client.query('INSERT INTO list (task) VALUES ($1) RETURNING *;',
+    [req.body.newtask],
     function(err, result){
       done();
       if (err) {
@@ -89,7 +89,7 @@ router.put('/:id', function(req, res){
 
     var id = req.params.id; //takes the value from /:id
     var task = req.body.task;
-    var complete = req.body.complete;
+    var completed = req.body.completed;
 
 
     pool.connect(function(err, client, done){
@@ -101,8 +101,8 @@ router.put('/:id', function(req, res){
             return;
         }
         // 'UPDATE list SET $2 WHERE id=$1', [id, true]
-    client.query('UPDATE list SET complete = $2 WHERE id = $1 RETURNING *;',
-        [task, complete], function(err, result){
+    client.query('UPDATE list SET completed = $2 WHERE id = $1 RETURNING *;',
+        [task, completed], function(err, result){
             if(err){
             console.log('Error querying database',err);
             res.sendStatus(500);
