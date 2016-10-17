@@ -38,11 +38,15 @@ button {
 }
 
 .complete {
-  background-color: #5e5d5d;
+  background-color: #e2e2e2;
+  margin-left: 320px;
 }
 .delete {
   background-color: #fc4646;
   color: white;
+  /*float: right;*/
+
+
 }
 
 li {
@@ -52,4 +56,5 @@ li {
   padding-left: 15px;
   font-size: 18px;
   border-radius: 10px;
+  /*display: inline-block;*/
 }
