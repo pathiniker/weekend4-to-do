@@ -8,6 +8,7 @@ $(function() {
 });
 
 
+
 function getList() {
   $.ajax({
     type: 'GET',
@@ -30,7 +31,7 @@ function displayTasks(response) {
     $completeButton.data('id', list.id);
     $form.append($completeButton);
 
-    var $deleteButton = $('<button class="delete">Delete</button>');
+    var $deleteButton = $('<button class="delete" data-id="' + list.id + '">Delete</button>');
     $deleteButton.data('id', list.id);
     $form.append($deleteButton);
 
@@ -61,9 +62,10 @@ function updateTask(event) {
   var $button = $(this);
   var $form = $button.closest('form');
 
+
   var data = $form.serialize();
 
-  // $li.append('')
+  $(this).css('background-color', '#46fc4f');
 
   console.log('data', data);
   $.ajax({

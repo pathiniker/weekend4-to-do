@@ -9,3 +9,5 @@ task varchar(120) NOT NULL
 );
 
 -- 3. add completed yes / no column
+ALTER TABLE list
+ADD status boolean;
